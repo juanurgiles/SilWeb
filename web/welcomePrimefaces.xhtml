@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+        
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="120" resizable="true" closable="true" collapsible="true" style="padding: 15px; ">
+                    
+
+                    <h:form>  
+
+                        <p:growl id="messages" ></p:growl>  
+
+                        <p:toolbar>  
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton type="button" value="New" icon="ui-icon-document" />  
+
+                                <p:commandButton type="button" value="Open" icon="ui-icon-folder-open"/>  
+
+                                <p:separator />  
+
+                                <p:commandButton type="button" title="Save" icon="ui-icon-disk"/>  
+                                <p:commandButton type="button" title="Delete" icon="ui-icon-trash"/>  
+                                <p:commandButton type="button" title="Print" icon="ui-icon-print"/>  
+                            </p:toolbarGroup>  
+
+                            <p:toolbarGroup align="right">  
+                                <p:menuButton value="Options">  
+                                    <p:menuitem value="Home" url="http://www.primefaces.org" />  
+                                    <p:menuitem value="ShowCase"  
+                                                url="http://www.primefaces.org/showcase" />  
+                                    <p:menuitem value="TouchFaces"  
+                                                url="http://www.primefaces.org/showcase/touch" />  
+                                </p:menuButton>  
+                            </p:toolbarGroup>  
+
+                        </p:toolbar>  
+                    </h:form>  
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    Footer
+                </p:layoutUnit>
+                <!--
+                                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                                    <p:menu>
+                                        <p:submenu label="Resources">
+                                            <p:menuitem value="Demo" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
+                                            <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
+                                            <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
+                                            <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
+                
+                                        </p:submenu>
+                
+                                    </p:menu>
+                                </p:layoutUnit>
+                -->
+                <p:layoutUnit position="center" style="padding: 40px; ">
+                   
+                    <h:form id="form3">  
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                        <p:commandButton id="infoButton" value="Info" actionListener="#{messageController.addInfo}"/>  
+                        <p:commandButton id="warnButton" value="Warn" actionListener="#{messageController.addWarn}"/>  
+                        <p:commandButton id="errorButton" value="Error" actionListener="#{messageController.addError}"/>  
+                        <p:commandButton id="fatalButton" value="Fatal" actionListener="#{messageController.addFatal}"/>  
+ 
+</h:form>  
+                    <h:form id="form1">  
+
+                        <p:growl id="msgs" showDetail="true" />  
+
+                        <p:dataTable id="Referencias" var="ref" value="#{ReferenciaBean.referencias}">  
+
+                            <p:column headerText="Titulo" style="width:24%">  
+                                <h:outputText value="#{ref.tituloReferencia}" />  
+                            </p:column>  
+
+                            <p:column headerText="Autor" style="width:24%">  
+                                <h:outputText value="#{ref.autorPersonal}" />  
+                            </p:column>  
+
+                            <p:column headerText="Año" style="width:24%">  
+                                <h:outputText value="#{ref.anio}" />  
+                            </p:column>  
+                            <p:column headerText="Año" style="width:24%">  
+                                <h:outputText value="#{ref.idTipoReferencia.nombreTipoReferencia}" />  
+                            </p:column>  
+
+
+                            <p:column style="width:4%">  
+                                <p:commandButton id="selectButton" update=":form1:display" onclick="RefDialog.show()" icon="ui-icon-search" title="View">  
+                                    <f:setPropertyActionListener value="#{ref}" target="#{ReferenciaBean.selReferencia}"   />  
+                                </p:commandButton>  
+                            </p:column>  
+
+                        </p:dataTable>  
+
+
+                        <p:dialog   header="Referencia" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                                   showEffect="fade"  modal="false">  
+                            <p:growl life="5000" showDetail="true" showSummary="true" id="mymessage" />
+                            <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                                 <h:outputText value="Año"  />  
+                                 <p:selectOneMenu  value="#{ReferenciaBean.selReferencia.idTipoReferencia}">  
+                                    <f:selectItem itemLabel="Select One" itemValue="" />  
+                                    <f:selectItems value ="#{TipoReferenciaBean.tiporeferencias}" var="ref" itemLabel="#{ref.nombreTipoReferencia}" itemValue="#{ref}" />  
+                                    
+                                </p:selectOneMenu>  
+                                
+                                <h:outputText value="Titulo" />  
+                                <h:inputText value="#{ReferenciaBean.selReferencia.tituloReferencia}" style="font-weight:bold"/>  
+
+                                <h:outputText value="Año"  />  
+                                <p:selectOneMenu  value="#{ReferenciaBean.selReferencia.anio}">  
+                                    <f:selectItem itemLabel="Select One" itemValue="" />  
+                                    <f:selectItem itemLabel="2013" itemValue="2013" />  
+                                    <f:selectItem itemLabel="2012" itemValue="2012" />  
+                                    <f:selectItem itemLabel="2011" itemValue="2011" />  
+                                </p:selectOneMenu>  
+
+                                <h:outputText value="Autor Personal" />  
+                                <h:inputText  value="#{ReferenciaBean.selReferencia.autorPersonal}" style="font-weight:bold"/>  
+                                <h:outputText value="Autor Corporativo" />  
+                                <h:inputText value="#{ReferenciaBean.selReferencia.autorCorporativo}" style="font-weight:bold"/>  
+
+
+
+
+                            </h:panelGrid>  
+
+                            <p:commandButton id="saveButton" value="sv" actionListener="#{ReferenciaBean.editar()}" update=":form1:Referencias"   icon="ui-icon-search" title="View" ajax="true">
+
+                            </p:commandButton>  
+
+                        </p:dialog>
+
+                    </h:form>  
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+
+</html>
+
