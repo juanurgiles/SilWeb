@@ -1,0 +1,66 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+            
+            <p:commandButton id="nuevoButton" icon="ui-icon-document" update=":form2:display" action="#{TipoReferenciaBean.nuevo()}"  title="Nuevo"  value="Nuevo">  
+
+            </p:commandButton>  
+            <p:dataTable paginator="true" rows="10"  id="Referencias" var="ref" value="#{TipoReferenciaBean.tiporeferencias}" >  
+                <f:facet name="header">  
+                    TipoReferencia 
+                </f:facet>  
+                <p:column sortBy="#{ref.nombreTipoReferencia}" headerText="Titulo" style="width:24%">  
+                    <h:outputText value="#{ref.nombreTipoReferencia}" />  
+                </p:column>  
+
+
+
+                <p:column style="width:4%">  
+                    <p:commandButton id="selectButton" update=":form2:display" onclick="RefDialog.show();" icon="ui-icon-pencil" title="Editar">  
+                        <f:setPropertyActionListener value="#{ref}" target="#{TipoReferenciaBean.selTipoReferencia}"   />  
+                    </p:commandButton>  
+                    <p:commandButton id="deleteButton" update=":form1:Referencias" action="#{TipoReferenciaBean.borrar(ref)}" icon="ui-icon-trash" title="Borrar">  
+                    </p:commandButton>  
+                </p:column>  
+
+            </p:dataTable>  
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Referencia" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+                
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{TipoReferenciaBean.selTipoReferencia.nombreTipoReferencia}" style="font-weight:bold"/>  
+
+
+
+                    <h:outputText value="Descripción" />  
+                     
+                    <p:editor id="editor" value="#{TipoReferenciaBean.selTipoReferencia.descripcionReferencia}" width="600"/> 
+                   
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{TipoReferenciaBean.editar()}" update=":form1:Referencias"   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

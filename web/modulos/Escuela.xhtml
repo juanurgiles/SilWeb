@@ -1,0 +1,73 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+
+            <p:commandButton id="nuevoButton" icon="ui-icon-document" update=":form2:display" action="#{EscuelaBean.nuevo()}"  title="Nuevo"  value="Nuevo">  
+
+            </p:commandButton>  
+            <p:dataTable paginator="true" rows="10"  id="Usuarios" var="esc" value="#{EscuelaBean.escuelas}" >  
+                <f:facet name="header">  
+                   Escuelas 
+                </f:facet>  
+                <p:column sortBy="#{esc.nombreEscuela}" headerText="Nombre" style="width:24%">  
+                    <h:outputText value="#{esc.nombreEscuela}" />  
+                </p:column>  
+
+                <p:column sortBy="#{esc.idFacultad.nombreFacultad}" headerText="Facultad" style="width:24%">  
+
+                    <h:outputText  value="#{esc.idFacultad.nombreFacultad}" />  
+                </p:column>  
+
+                <p:column style="width:4%">  
+                    <p:commandButton id="selectButton" update=":form2:display" onclick="RefDialog.show();" icon="ui-icon-pencil" title="Editar">  
+                        <f:setPropertyActionListener value="#{esc}" target="#{EscuelaBean.selEscuela}"   />  
+                    </p:commandButton>  
+                    <p:commandButton id="deleteButton" update=":form1:Usuarios" action="#{EscuelaBean.borrar(esc)}" icon="ui-icon-trash" title="Borrar">  
+                    </p:commandButton>  
+                </p:column>  
+
+            </p:dataTable>  
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Referencia" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    <h:outputText value="Tipo"  />  
+                    <p:selectOneMenu value="#{EscuelaBean.selEscuela.idFacultad}" converter="FacultadConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{FacultadBean.facultades}" var="fac" itemLabel="#{fac.nombreFacultad}" itemValue="#{fac}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{EscuelaBean.selEscuela.nombreEscuela}" style="font-weight:bold"/>  
+
+                    <h:outputText value="Dirección" />  
+                    <p:editor value="#{EscuelaBean.selEscuela.descripcion}" style="font-weight:bold"/>  
+
+
+
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{EscuelaBean.editar()}" update=":form1:Usuarios"   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

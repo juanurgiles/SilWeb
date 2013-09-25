@@ -9,9 +9,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.utpl.silaboweb.entidad.Referencia;
 import com.utpl.silaboweb.entidad.TipoReferencia;
-import java.util.Collection;
 import java.util.List;
-import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -36,10 +34,30 @@ public class test {
         
         test t = new test();
         
-        t.dtest();
+        t.dtest1();
         
     }
     private DefaultClientConfig clientConfig;
+    public void dtest1(){
+    GenericRest gr = new GenericRest("com.utpl.javasilabopersist.entidad.tiporeferencia");
+        GenericType<List<TipoReferencia>> gType1 = new GenericType<List<TipoReferencia>>() {};
+        clientConfig = new DefaultClientConfig();
+        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+        //gr.accept(MediaType.APPLICATION_JSON).get(Referencia[].class);
+        
+        List<TipoReferencia> refs1 = (List<TipoReferencia>) gr.findAll_XML(gType1);
+
+
+        
+        for (TipoReferencia referencia : refs1) {
+            System.out.println(referencia.getIdTipoReferencia()+referencia.getNombreTipoReferencia());
+        }
+        TipoReferencia r = refs1.get(1);
+        r.setNombreTipoReferencia("654640");
+        r.setIdTipoReferencia(null);
+        //r.setReferenciaCollection(null);
+        gr.create_JSON(r);
+    }
     public void dtest(){
     GenericRest gr = new GenericRest("com.utpl.javasilabopersist.entidad.referencia");
         GenericType<List<Referencia>> gType1 = new GenericType<List<Referencia>>() {};

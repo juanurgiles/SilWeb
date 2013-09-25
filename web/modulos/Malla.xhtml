@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+
+            <p:commandButton id="nuevoButton" icon="ui-icon-document" update=":form2:display" action="#{MallaBean.nuevo()}"  title="Nuevo"  value="Nuevo">  
+
+            </p:commandButton>  <br></br>
+            Seleccionar Plan Curricular:   <br></br>
+            <p:selectOneMenu id="otro" value="#{MallaBean.vmactivo}" converter="VersionMallaConverter" >  
+                <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                <f:selectItems value ="#{VersionMallaBean.versionMallas}" var="vmall1" itemLabel="#{vmall1.nombre}" itemValue="#{vmall1}" />
+                <p:ajax  event="change" listener="#{MallaBean.popular()}" update=':form1:Usuarios' />
+                
+
+            </p:selectOneMenu>  
+            <p:dataTable paginator="true" rows="10"  id="Usuarios" var="mall" value="#{MallaBean.mallas}" >  
+                <f:facet name="header">  
+                    Mallas 
+                </f:facet>  
+                <p:column sortBy="#{mall.nombreMalla}" headerText="Nombre" style="width:24%">  
+                    <h:outputText value="#{mall.nombreMalla}" />  
+                </p:column>  
+
+                <p:column sortBy="#{mall.idCarrera.nombreCarrera}" headerText="Carrera" style="width:24%">  
+
+                    <h:outputText  value="#{mall.idCarrera.nombreCarrera}" />  
+                </p:column>  
+               
+                <p:column style="width:4%">  
+                    <p:commandButton id="selectButton" update=":form2:display" onclick="RefDialog.show();" icon="ui-icon-pencil" title="Editar">  
+                        <f:setPropertyActionListener value="#{mall}" target="#{MallaBean.selMalla}"   />  
+                    </p:commandButton>  
+                    <p:commandButton id="deleteButton" update=":form1:Usuarios" action="#{MallaBean.borrar(mall)}" icon="ui-icon-trash" title="Borrar">  
+                    </p:commandButton>  
+                </p:column>  
+
+            </p:dataTable>  
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Malla" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    <h:outputText value="Carrera"  />  
+                    <p:selectOneMenu value="#{MallaBean.selMalla.idCarrera}" converter="CarreraConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{CarreraBean.carreras}" var="mall" itemLabel="#{mall.nombreCarrera}" itemValue="#{mall}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Tipo"  />  
+                    <p:selectOneMenu value="#{MallaBean.selMalla.idVersionMalla}" converter="VersionMallaConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{VersionMallaBean.versionMallas}" var="vmall" itemLabel="#{vmall.nombre}" itemValue="#{vmall}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{MallaBean.selMalla.nombreMalla}" style="font-weight:bold"/>  
+
+                    <h:outputText value="Descripción" />  
+                    <p:editor value="#{MallaBean.selMalla.periodos}" style="font-weight:bold"/>  
+
+
+
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{MallaBean.editar()}" update=":form1:Usuarios"   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

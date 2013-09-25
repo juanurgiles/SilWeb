@@ -1,0 +1,119 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+
+            <p:fieldset legend="AvailableCars">
+
+                <p:dataGrid id="availableCars" var="mall"
+                            value="#{MallaBean.mallas}" columns="3">
+
+                    <p:column>
+
+                        <p:panel id="pnl" header="#{mall.nombreMalla}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:draggable for="pnl" revert="true"
+                                     handle=".ui-panel-titlebar" stack=".ui-panel"/>
+
+                    </p:column>
+
+                </p:dataGrid>
+
+            </p:fieldset>
+            <p:fieldset id="selectedCars" legend="Selected Cars" style="margin-top:20px">  
+
+                <p:outputPanel id="dropArea">  
+
+                    <h:outputText value="!!!Drop here!!!"  
+                                  rendered="#{empty MallaBean.droppedCars}"  
+                                  style="font-size:24px;" />  
+
+                    <p:dataTable var="car" value="#{tableBean.droppedCars}"  
+                                 rendered="#{not empty tableBean.droppedCars}">  
+
+                        <p:column headerText="Model">  
+                            <h:outputText value="#{car.model}" />  
+                        </p:column>  
+
+                        <p:column headerText="Year">  
+                            <h:outputText value="#{car.year}" />  
+                        </p:column>  
+
+                        <p:column headerText="Manufacturer">  
+                            <h:outputText value="#{car.manufacturer}" />  
+                        </p:column>  
+
+                        <p:column headerText="Color">  
+                            <h:outputText value="#{car.color}" />  
+                        </p:column>  
+
+                        <p:column style="width:32px">  
+                            <p:commandButton update=":carForm:display"  
+                                             oncomplete="PF('carDialog').show()"  
+                                             icon="ui-icon-search">  
+                                <f:setPropertyActionListener value="#{car}"  
+                                                             target="#{tableBean.selectedCar}" />  
+                            </p:commandButton>  
+                        </p:column>  
+                    </p:dataTable>  
+
+                </p:outputPanel>  
+
+            </p:fieldset>  
+              <p:droppable for="selectedCars" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableCars" onDrop="handleDrop">  
+        <p:ajax listener="#{tableBean.onCarDrop}" update="dropArea availableCars" />  
+    </p:droppable>  
+
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Malla" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    <h:outputText value="Carrera"  />  
+                    <p:selectOneMenu value="#{MallaBean.selMalla.idCarrera}" converter="CarreraConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{CarreraBean.carreras}" var="mall" itemLabel="#{mall.nombreCarrera}" itemValue="#{mall}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Tipo"  />  
+                    <p:selectOneMenu value="#{MallaBean.selMalla.idVersionMalla}" converter="VersionMallaConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{VersionMallaBean.versionMallas}" var="vmall" itemLabel="#{vmall.nombre}" itemValue="#{vmall}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{MallaBean.selMalla.nombreMalla}" style="font-weight:bold"/>  
+
+                    <h:outputText value="Descripción" />  
+                    <p:editor value="#{MallaBean.selMalla.periodos}" style="font-weight:bold"/>  
+
+
+
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{MallaBean.editar()}" update=""   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

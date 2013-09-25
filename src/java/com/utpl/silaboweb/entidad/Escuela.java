@@ -22,11 +22,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author root
  */
+@XmlType
 public class Escuela implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer idEscuela;

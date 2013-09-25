@@ -5,18 +5,15 @@
 package com.utpl.silaboweb.rest;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.utpl.silaboweb.entidad.Referencia;
-import java.util.List;
 
 /**
- * Jersey REST client generated for REST resource:CarreraFacadeREST
- * [com.utpl.javasilabopersist.entidad.carrera]<br>
+ * Jersey REST client generated for REST resource:MallaFacadeREST
+ * [com.utpl.javasilabopersist.entidad.malla]<br>
  * USAGE:
  * <pre>
- *        CarreraRest client = new CarreraRest();
+ *        NewJerseyClient client = new NewJerseyClient();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -24,16 +21,15 @@ import java.util.List;
  *
  * @author root
  */
-public class GenericRest {
-
+public class NewJerseyClient {
     private WebResource webResource;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/EjbSilaboPersistW/webresources";
 
-    public GenericRest(String WebRes) {
+    public NewJerseyClient() {
         com.sun.jersey.api.client.config.ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
         client = Client.create(config);
-        webResource = client.resource(BASE_URI).path(WebRes); // "com.utpl.javasilabopersist.entidad.carrera" es webres
+        webResource = client.resource(BASE_URI).path("com.utpl.javasilabopersist.entidad.malla");
     }
 
     public void remove(String id) throws UniformInterfaceException {
@@ -51,17 +47,7 @@ public class GenericRest {
         return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findAll_XML(GenericType<T> superType) throws UniformInterfaceException {
-        WebResource resource = webResource;
-        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(superType);
-    }
-
     public <T> T findAll_JSON(Class<T> responseType) throws UniformInterfaceException {
-        WebResource resource = webResource;
-        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-    }
-
-    public <T> T findAll_JSON(GenericType<T> responseType) throws UniformInterfaceException {
         WebResource resource = webResource;
         return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
@@ -72,6 +58,10 @@ public class GenericRest {
 
     public void edit_JSON(Object requestEntity) throws UniformInterfaceException {
         webResource.type(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(requestEntity);
+    }
+
+    public <T> T buscarMientras(Class<T> responseType, String campo, String valor) throws UniformInterfaceException {
+        return webResource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{campo, valor})).post(responseType);
     }
 
     public void create_XML(Object requestEntity) throws UniformInterfaceException {
@@ -100,28 +90,14 @@ public class GenericRest {
         return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T find_XML(GenericType<T> responseType, String id) throws UniformInterfaceException {
-        WebResource resource = webResource;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-    }
-
     public <T> T find_JSON(Class<T> responseType, String id) throws UniformInterfaceException {
         WebResource resource = webResource;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
-   
-     public <T> T buscarMientras_XML(GenericType<T> responseType, String campo, String valor) throws UniformInterfaceException {
-        
-          return   webResource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{campo, valor})).accept(javax.ws.rs.core.MediaType.APPLICATION_XML).post(responseType);
-    }
-//     public <T> T buscarMientras1(Class<T> responseType, String campo, String valor) throws UniformInterfaceException {
-//          WebResource resource = webResource;
-//         resource.accept(javax.ws.rs.core.MediaType.APPLICATION_XML).get(superType);
-//        return webResource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{campo, valor})).post(responseType);
-//    }
+
     public void close() {
         client.destroy();
     }
+    
 }

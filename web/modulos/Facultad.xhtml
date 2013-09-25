@@ -1,0 +1,65 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+
+            <p:commandButton id="nuevoButton" icon="ui-icon-document" update=":form2:display" action="#{FacultadBean.nuevo()}"  title="Nuevo"  value="Nuevo">  
+
+            </p:commandButton>  
+            <p:dataTable paginator="true" rows="10"  id="Facultades" var="fac" value="#{FacultadBean.facultades}" >  
+                <f:facet name="header">  
+                    Facultades 
+                </f:facet>  
+                <p:column sortBy="#{fac.nombreFacultad}" headerText="Nombre" style="width:24%">  
+                    <h:outputText value="#{fac.nombreFacultad}" />  
+                </p:column>  
+
+
+
+                <p:column style="width:4%">  
+                    <p:commandButton id="selectButton" update=":form2:display" onclick="RefDialog.show();" icon="ui-icon-pencil" title="Editar">  
+                        <f:setPropertyActionListener value="#{fac}" target="#{FacultadBean.selFacultad}"   />  
+                    </p:commandButton>  
+                    <p:commandButton id="deleteButton" update=":form1:Facultades" action="#{UsuarioBean.borrar(fac)}" icon="ui-icon-trash" title="Borrar">  
+                    </p:commandButton>  
+                </p:column>  
+
+            </p:dataTable>  
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Referencia" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{FacultadBean.selFacultad.nombreFacultad}" style="font-weight:bold"/>  
+
+                    <h:outputText value="Descripción" />  
+                    <p:editor id="editor" value="#{FacultadBean.selFacultad.descripcionFacultad}" width="600"/>  
+
+
+
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{FacultadBean.editar()}" update=":form1:Facultades"   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

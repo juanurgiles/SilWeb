@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/plantillas/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="left" >
+
+    </ui:define>
+    <ui:define name="content" >
+
+
+        <h:form id="form1">  
+
+            <p:commandButton id="nuevoButton" icon="ui-icon-document" update=":form2:display" action="#{UsuarioBean.nuevo()}"  title="Nuevo"  value="Nuevo">  
+
+            </p:commandButton>  
+            <p:dataTable paginator="true" rows="10"  id="Usuarios" var="usr" value="#{UsuarioBean.profesores}" >  
+                <f:facet name="header">  
+                    Usuarios 
+                </f:facet>  
+                <p:column sortBy="#{usr.nombreProfesor}" headerText="Nombre" style="width:24%">  
+                    <h:outputText value="#{usr.nombreProfesor}" />  
+                </p:column>  
+
+                <p:column sortBy="#{usr.telefono}" headerText="Teléfono" style="width:24%">  
+
+                    <h:outputText  value="#{usr.telefono}" />  
+                </p:column>  
+
+                <p:column sortBy="#{usr.correo}" headerText="Correo" style="width:24%">  
+                    <h:outputText value="#{usr.correo}" />  
+                </p:column>  
+                <p:column sortBy="#{usr.tipoUid.nombre}" headerText="Tipo" style="width:24%">  
+                    <h:outputText value="#{usr.tipoUid.nombre}" />  
+                </p:column>  
+
+
+                <p:column style="width:4%">  
+                    <p:commandButton id="selectButton" update=":form2:display" onclick="RefDialog.show();" icon="ui-icon-pencil" title="Editar">  
+                        <f:setPropertyActionListener value="#{usr}" target="#{UsuarioBean.selProfesor}"   />  
+                    </p:commandButton>  
+                    <p:commandButton id="deleteButton" update=":form1:Usuarios" action="#{UsuarioBean.borrar(usr)}" icon="ui-icon-trash" title="Borrar">  
+                    </p:commandButton>  
+                </p:column>  
+
+            </p:dataTable>  
+        </h:form>
+        <h:form id="form2">
+            <p:dialog   header="Referencia" widgetVar="RefDialog" resizable="false" id="RefDialog"  
+                        showEffect="fade"  modal="false">  
+
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                    <h:outputText value="Tipo"  />  
+                    <p:selectOneMenu value="#{UsuarioBean.selProfesor.tipoUid}" converter="TipoUConverter" >  
+                        <!-- <f:selectItem itemLabel="Select One" itemValue="" />  -->
+                        <f:selectItems value ="#{TipoUsuarioBean.tipousuarios}" var="usr" itemLabel="#{usr.nombre}" itemValue="#{usr}" />  
+
+                    </p:selectOneMenu>  
+                    <h:outputText value="Nombre" />  
+                    <h:inputText value="#{UsuarioBean.selProfesor.nombreProfesor}" style="font-weight:bold"/>  
+
+                    <h:outputText value="Dirección" />  
+                    <h:inputText value="#{UsuarioBean.selProfesor.direccion}" style="font-weight:bold"/>  
+
+
+
+                    <h:outputText  value="Teléfono" />  
+                    <p:inputMask mask='999-9999999999' value="#UsuarioBean.selProfesor.telefono}" />
+                    <h:outputText value="Celular" />  
+                    <p:inputText maxlength="13"   id="celular" value="#{UsuarioBean.selProfesor.celular}" style="font-weight:bold"/>  
+                    <h:outputText value="Correo" />  
+                    <h:inputText id="correo" value="#{UsuarioBean.selProfesor.correo}" style="font-weight:bold"/>  
+                    <h:outputText value="Detalles" />  
+                    <h:inputText id="detalles" value="#{UsuarioBean.selProfesor.detalles}" style="font-weight:bold"/>  
+                    <h:outputText value="facebook" />  
+                    <h:inputText value="#{UsuarioBean.selProfesor.facebook}" style="font-weight:bold"/>  
+                    <h:outputText value="tweeter" />  
+                    <h:inputText value="#{UsuarioBean.selProfesor.tweeter}" style="font-weight:bold"/>  
+                    <h:outputText value="Usuario" />  
+                    <h:inputText value="#{UsuarioBean.selProfesor.usuario}" style="font-weight:bold"/>  
+
+                    <h:outputLabel for="pwd1" value="Contraseña 1: *" />  
+                    <p:password id="pwd1" value="#{UsuarioBean.selProfesor.pass}" match="pwd2" label="Password 1" required="true"/>  
+
+                    <h:outputLabel for="pwd2" value="Contraseña 2: *" />  
+                    <p:password id="pwd2" value="#{UsuarioBean.selProfesor.pass}" label="Password 2" required="true"/>  
+
+
+                </h:panelGrid>  
+
+                <p:commandButton id="saveButton" value="Guardar" actionListener="#{UsuarioBean.editar()}" update=":form1:Usuarios"   icon="ui-icon-search" title="View" ajax="true">
+
+                </p:commandButton>  
+
+            </p:dialog>
+
+        </h:form>  
+    </ui:define>
+</ui:composition>

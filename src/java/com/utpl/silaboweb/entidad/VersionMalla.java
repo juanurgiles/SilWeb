@@ -18,11 +18,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author root
  */
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlType
 public class VersionMalla implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer idVersionMalla;
